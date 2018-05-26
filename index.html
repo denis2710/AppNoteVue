@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Notebook</title>
+  <!-- icones e folha de estilo -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- incluindo a biblioteca na pagina -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- addicionando a biblioteca markdown -->
+  <script src="https://unpkg.com/marked"></script>
+  <!-- adicionando a biblioteca moment -->
+  <script src="http://unpkg.com/moment"></script>
+
+  <!-- notebook app -->
+  <div id="notebook">
+
+    <!-- sidebar -->
+    <aside class="side-bar">
+      <!-- toolbar -->
+      <div class="toolbar">
+        <!-- botao de adicionar nota -->
+        <button @click="addNota" :title="addNotaTituloBotao"><i class="material-icons">add</i>Adicionar Nota</button>
+      </div>
+      <div class="notes">
+        <div class="note" v-for="nota in notasOrdenadas" @click="selecionarNota(nota)" :class=" { selected : nota === notaSelecionada } "> <i class="icon material-icons" v-if="nota.favorita">star</i> {{nota.titulo}}</div>
+      </div>
+    </aside>
+    
+    <!-- painel principal -->
+    <template v-if="notaSelecionada">
+      <section class="main">
+        <!-- barra de ferramentas aqui -->
+        <div class="toolbar">
+          <input type="text" v-model="notaSelecionada.titulo" placeholder="Titulo da nota" />
+          <button @click="favoritarNota">
+            <i class="icon material-icons" v-if="notaSelecionada.favorita">star</i>
+            <i class="icon material-icons" v-else >star_border</i>
+          </button>
+          <button @click="removerNota" title="Remover Nota"><i class="material-icons">delete</i></button>
+        </div>
+
+        <textarea name="" id="" cols="30" rows="10" v-model="notaSelecionada.conteudo"></textarea>
+
+        <!-- status-bar -->
+        <div class="toobar status-bar">
+          <span class="date">
+            <span class="label">Criado</span>
+            <span class="valor">{{notaSelecionada.criadaem | data}}</span>
+          </span>
+
+          <span class="lines">
+              <span class="label">Linhas</span>
+              <span class="value">{{ qtdLinhas }}</span>
+          </span>
+
+          <span class="words">
+            <span class="label">Palavras</span>
+            <span class="value">{{ qtdPalavras }}</span>
+          </span>
+
+          <span class="characters">
+            <span class="label">Caracteres</span>
+            <span class="value">{{ qtdCaracteres }}</span>
+            </span>
+        </div>
+      </section>
+
+      <!-- painel preview -->
+      <aside class="preview" v-html="previewNota" ></aside>
+    </template>
+
+  </div>
+
+  <!-- um pouco de javascript -->
+  <script src="script.js"></script>
+</body>
+</html>
